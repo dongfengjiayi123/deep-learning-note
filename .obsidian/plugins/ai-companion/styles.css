@@ -1,0 +1,218 @@
+/* AI Assistant Modal Styles */
+
+/* Modal sizing */
+.modal:has(.ai-assistant-modal) {
+    width: 600px;
+    max-width: 90vw;
+    max-height: 80vh;
+}
+
+/* Content element styling */
+.ai-assistant-modal {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 0;
+}
+
+.ai-assistant-modal h2 {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Context Section */
+.ai-assistant-context-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.ai-assistant-label {
+    font-weight: 500;
+}
+
+.ai-assistant-context-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.ai-assistant-context-display {
+    background-color: var(--background-secondary);
+    border-radius: 6px;
+    padding: 12px;
+}
+
+.ai-assistant-context-files-label {
+    font-weight: 500;
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+
+.ai-assistant-context-files {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.ai-assistant-context-file {
+    background-color: var(--background-modifier-border);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ai-assistant-remove-context {
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.ai-assistant-remove-context:hover {
+    color: var(--text-error);
+}
+
+/* Question Section */
+.ai-assistant-question-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ai-assistant-question-input {
+    width: 100%;
+    min-height: 80px;
+    padding: 12px;
+    border-radius: 6px;
+    background-color: var(--background-primary);
+    border: 1px solid var(--background-modifier-border);
+    font-size: 14px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+.ai-assistant-question-input:focus {
+    border-color: var(--interactive-accent);
+    outline: none;
+}
+
+.ai-assistant-button-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Response Section */
+.ai-assistant-response-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.ai-assistant-response {
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 6px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ai-assistant-question {
+    font-weight: 500;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.ai-assistant-answer {
+    white-space: pre-wrap;
+    line-height: 1.5;
+}
+
+.ai-assistant-action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 10px;
+    border-top: 1px solid var(--background-modifier-border);
+    padding-top: 10px;
+}
+
+/* Buttons */
+.ai-assistant-button {
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    background-color: var(--interactive-normal);
+    color: var(--text-normal);
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.ai-assistant-button:hover {
+    background-color: var(--interactive-hover);
+}
+
+.ai-assistant-button-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+}
+
+.ai-assistant-button-icon svg {
+    width: 14px;
+    height: 14px;
+}
+
+.ai-assistant-copied {
+    background-color: var(--color-green) !important;
+    color: white !important;
+}
+
+.ai-assistant-inserted {
+    background-color: var(--color-blue) !important;
+    color: white !important;
+}
+
+.ai-assistant-primary-button {
+    background-color: var(--interactive-accent);
+    color: var(--text-on-accent);
+}
+
+.ai-assistant-primary-button:hover {
+    background-color: var(--interactive-accent-hover);
+}
+
+/* Loading and Error */
+.ai-assistant-loading {
+    padding: 10px;
+    text-align: center;
+    color: var(--text-muted);
+    font-style: italic;
+    animation: pulse 1.5s infinite;
+}
+
+.ai-assistant-error {
+    color: var(--text-error);
+    background-color: var(--background-modifier-error);
+    padding: 12px;
+    border-radius: 6px;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
