@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企业数据大屏 - 暖色调完整版</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #1a0a00;
+            color: #ffecd2;
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            /* 【改进点2-v2】页头渐变改为暖色调 */
+            background: linear-gradient(90deg, #1a0800 0%, #3a1800 50%, #1a0800 100%);
+            border-bottom: 2px solid #ffb347;
+        }
+        .header-left, .header-right {
+            font-size: 14px;
+            color: #ffc973;
+        }
+        .header h1 {
+            font-size: 32px;
+            letter-spacing: 10px;
+            /* 【改进点2-v2】标题渐变改为暖色 */
+            background: linear-gradient(90deg, #ff9f43, #e55039);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .dashboard {
+            display: grid;
+            grid-template-columns: 25% 50% 25%;
+            grid-template-rows: auto auto;
+            gap: 15px;
+            padding: 15px;
+        }
+        .panel {
+            /* 【改进点2-v2】面板背景和边框改为暖色调 */
+            background: rgba(50, 25, 5, 0.4);
+            border: 1px solid rgba(255, 179, 71, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .panel-title {
+            font-size: 16px;
+            color: #ffc973;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 179, 71, 0.3);
+        }
+        .chart-container {
+            width: 100%;
+            height: 280px;
+        }
+        .center-top {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 20px 0;
+        }
+        .kpi-card {
+            text-align: center;
+            padding: 15px 25px;
+            /* 【改进点2-v2】KPI卡片改为暖色调 */
+            background: rgba(255, 159, 67, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 159, 67, 0.3);
+        }
+        .kpi-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ff9f43;
+        }
+        .kpi-name {
+            font-size: 13px;
+            color: #ffe0b2;
+            margin-top: 5px;
+        }
+        .center-map {
+            height: 400px;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .data-table th {
+            background: rgba(255, 159, 67, 0.2);
+            color: #ffc973;
+            padding: 10px;
+            text-align: left;
+        }
+        .data-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid rgba(255, 159, 67, 0.1);
+            color: #ffecd2;
+        }
+        .data-table tr:hover td {
+            background: rgba(255, 159, 67, 0.1);
+        }
+        /* 【改进点3-v2】点击提示弹窗 */
+        .click-toast {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 159, 67, 0.95);
+            color: #1a0a00;
+            padding: 10px 28px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        .click-toast.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left" id="currentDate"></div>
+        <h1>企业运营数据大屏</h1>
+        <div class="header-right">数据实时更新中</div>
+    </div>
+
+    <div class="dashboard">
+        <!-- 左侧面板 -->
+        <div class="left-column">
+            <!-- 【改进点1-v2】品类占比改为南丁格尔玫瑰图 -->
+            <div class="panel">
+                <div class="panel-title">品类占比</div>
+                <div id="categoryChart" class="chart-container"></div>
+            </div>
+            <!-- 【改进点3-v2】区域销量分布添加点击事件 -->
+            <div class="panel">
+                <div class="panel-title">区域销量分布</div>
+                <div id="regionChart" class="chart-container"></div>
+            </div>
+        </div>
+
+        <!-- 中间面板 -->
+        <div class="center-column">
+            <div class="panel center-top">
+                <div class="kpi-card">
+                    <div class="kpi-number" id="kpiRevenue">¥3,256万</div>
+                    <div class="kpi-name">年度总营收</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-number" id="kpiOrders">15,280</div>
+                    <div class="kpi-name">订单总量</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-number" id="kpiAvg">¥2,130</div>
+                    <div class="kpi-name">客均单价</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-number" id="kpiSat">96.2%</div>
+                    <div class="kpi-name">客户满意度</div>
+                </div>
+            </div>
+            <div class="panel">
+                <div class="panel-title">销售趋势分析</div>
+                <div id="trendChart" class="chart-container" style="height: 350px;"></div>
+            </div>
+        </div>
+
+        <!-- 右侧面板 -->
+        <div class="right-column">
+            <div class="panel">
+                <div class="panel-title">渠道销售对比</div>
+                <div id="channelChart" class="chart-container"></div>
+            </div>
+            <!-- 【改进点3-v2】实时订单面板保留 -->
+            <div class="panel">
+                <div class="panel-title">实时订单</div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>订单号</th>
+                            <th>产品</th>
+                            <th>金额</th>
+                            <th>状态</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orderTable"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 【改进点3-v2】库存状态仪表盘（新增浮动面板） -->
+    <div style="position:fixed; bottom:20px; right:20px; z-index:100;">
+        <div class="panel" style="width:240px; padding:10px;">
+            <div class="panel-title" style="font-size:14px; margin-bottom:8px;">库存状态</div>
+            <div id="inventoryGauge" style="width:220px; height:160px;"></div>
+        </div>
+    </div>
+
+    <!-- 【改进点3-v2】点击提示弹窗 -->
+    <div id="clickToast" class="click-toast"></div>
+
+    <script>
+        // 显示当前日期
+        var now = new Date();
+        document.getElementById('currentDate').textContent =
+            now.getFullYear() + '年' + (now.getMonth()+1) + '月' + now.getDate() + '日';
+
+        /* ============================
+         * 【改进点1-v2】品类占比 - 南丁格尔玫瑰图
+         * 原v2为普通饼图，改为南丁格尔玫瑰图
+         * ============================ */
+        var categoryChart = echarts.init(document.getElementById('categoryChart'));
+        var categoryOption = {
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b}: {c} ({d}%)',
+                /* 【改进点2-v2】提示框暖色调 */
+                backgroundColor: 'rgba(40,20,5,0.9)',
+                borderColor: '#ff9f43',
+                textStyle: { color: '#ffecd2' }
+            },
+            legend: {
+                orient: 'vertical',
+                right: 5,
+                top: 'center',
+                textStyle: { color: '#ffc973', fontSize: 11 },
+                itemWidth: 12,
+                itemHeight: 12
+            },
+            series: [{
+                name: '品类占比',
+                type: 'pie',
+                /* 【改进点1-v2】核心改动：roseType:'area' 启用南丁格尔玫瑰图 */
+                roseType: 'area',
+                radius: ['15%', '65%'],
+                center: ['35%', '50%'],
+                avoidLabelOverlap: false,
+                itemStyle: {
+                    borderRadius: 6,
+                    borderColor: '#1a0a00',
+                    borderWidth: 2
+                },
+                label: { show: false },
+                emphasis: {
+                    label: {
+                        show: true,
+                        fontSize: 16,
+                        fontWeight: 'bold',
+                        color: '#fff'
+                    },
+                    /* 【改进点2-v2】强调状态暖色高亮 */
+                    itemStyle: {
+                        shadowBlur: 15,
+                        shadowColor: 'rgba(255,159,67,0.5)'
+                    }
+                },
+                data: [
+                    /* 【改进点2-v2】暖色调配色 */
+                    { value: 1248, name: '电子数码', itemStyle: { color: '#ff6b6b' } },
+                    { value: 835, name: '家用电器', itemStyle: { color: '#ffa502' } },
+                    { value: 680, name: '服装配饰', itemStyle: { color: '#ff9ff3' } },
+                    { value: 534, name: '食品饮料', itemStyle: { color: '#ffd32a' } },
+                    { value: 420, name: '美妆护肤', itemStyle: { color: '#ff7979' } },
+                    { value: 310, name: '家居用品', itemStyle: { color: '#e17055' } }
+                ]
+            }]
+        };
+        categoryChart.setOption(categoryOption);
+
+        /* ============================
+         * 区域销量分布 - 柱状图（暖色调 + 点击事件）
+         * ============================ */
+        var regionChart = echarts.init(document.getElementById('regionChart'));
+        var regionOption = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: { type: 'shadow' },
+                /* 【改进点2-v2】提示框暖色调 */
+                backgroundColor: 'rgba(40,20,5,0.9)',
+                borderColor: '#ff9f43'
+            },
+            grid: { left: '3%', right: '8%', bottom: '3%', containLabel: true },
+            xAxis: {
+                type: 'category',
+                data: ['华东', '华南', '华北', '西南', '华中', '西北', '东北'],
+                axisLabel: { color: '#ffe0b2', fontSize: 11 },
+                axisLine: { lineStyle: { color: 'rgba(255,200,120,0.2)' } }
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: { color: '#ffe0b2' },
+                splitLine: { lineStyle: { color: 'rgba(255,159,67,0.1)' } }
+            },
+            series: [{
+                name: '销量',
+                type: 'bar',
+                barWidth: '45%',
+                data: [3800, 3200, 2800, 2100, 1900, 1100, 850],
+                itemStyle: {
+                    /* 【改进点2-v2】柱状图渐变改为暖色 */
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                        { offset: 0, color: '#ff9f43' },
+                        { offset: 1, color: '#e55039' }
+                    ]),
+                    borderRadius: [4, 4, 0, 0]
+                }
+            }]
+        };
+        regionChart.setOption(regionOption);
+
+        /* 【改进点3-v2】区域销量分布 - 添加点击事件 */
+        regionChart.on('click', function(params) {
+            console.log('点击区域：' + params.name);
+            var toast = document.getElementById('clickToast');
+            toast.textContent = '已点击区域：' + params.name + '，销量：' + params.value;
+            toast.classList.add('show');
+            setTimeout(function() {
+                toast.classList.remove('show');
+            }, 2000);
+        });
+
+        /* ============================
+         * 销售趋势 - 折线图（暖色调改造）
+         * ============================ */
+        var trendChart = echarts.init(document.getElementById('trendChart'));
+        var trendOption = {
+            tooltip: {
+                trigger: 'axis',
+                backgroundColor: 'rgba(40,20,5,0.9)',
+                borderColor: '#ff9f43'
+            },
+            legend: {
+                data: ['2023年', '2024年'],
+                textStyle: { color: '#ffc973' },
+                top: 5
+            },
+            grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+                axisLabel: { color: '#ffe0b2' },
+                axisLine: { lineStyle: { color: 'rgba(255,200,120,0.2)' } }
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: { color: '#ffe0b2' },
+                splitLine: { lineStyle: { color: 'rgba(255,159,67,0.1)' } }
+            },
+            series: [
+                {
+                    name: '2023年',
+                    type: 'line',
+                    smooth: true,
+                    data: [190, 210, 235, 225, 255, 275, 265, 290, 315, 340, 370, 400],
+                    /* 【改进点2-v2】2023年线条改为暗暖色 */
+                    lineStyle: { color: '#c44e2b', width: 2 },
+                    areaStyle: { color: 'rgba(196,78,43,0.1)' }
+                },
+                {
+                    name: '2024年',
+                    type: 'line',
+                    smooth: true,
+                    data: [220, 240, 270, 260, 290, 310, 300, 330, 360, 390, 420, 450],
+                    /* 【改进点2-v2】2024年线条改为亮暖色 */
+                    lineStyle: { color: '#ff9f43', width: 3 },
+                    areaStyle: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                            { offset: 0, color: 'rgba(255,159,67,0.3)' },
+                            { offset: 1, color: 'rgba(255,159,67,0)' }
+                        ])
+                    }
+                }
+            ]
+        };
+        trendChart.setOption(trendOption);
+
+        /* ============================
+         * 渠道销售对比（暖色调改造）
+         * ============================ */
+        var channelChart = echarts.init(document.getElementById('channelChart'));
+        var channelOption = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: { type: 'shadow' },
+                backgroundColor: 'rgba(40,20,5,0.9)',
+                borderColor: '#ff9f43'
+            },
+            legend: {
+                data: ['2023年', '2024年'],
+                textStyle: { color: '#ffc973' },
+                top: 5
+            },
+            grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+            xAxis: {
+                type: 'value',
+                axisLabel: { color: '#ffe0b2' },
+                splitLine: { lineStyle: { color: 'rgba(255,159,67,0.1)' } }
+            },
+            yAxis: {
+                type: 'category',
+                data: ['线上商城', '实体门店', '分销商', '社交电商', '直播带货'],
+                axisLabel: { color: '#ffe0b2' },
+                axisLine: { lineStyle: { color: 'rgba(255,200,120,0.2)' } }
+            },
+            series: [
+                {
+                    name: '2023年',
+                    type: 'bar',
+                    data: [380, 320, 270, 220, 180],
+                    /* 【改进点2-v2】2023年渠道对比改为暗暖色 */
+                    itemStyle: { color: '#c44e2b' }
+                },
+                {
+                    name: '2024年',
+                    type: 'bar',
+                    data: [520, 350, 310, 420, 480],
+                    /* 【改进点2-v2】2024年渠道对比改为亮暖色 */
+                    itemStyle: { color: '#ff9f43' }
+                }
+            ]
+        };
+        channelChart.setOption(channelOption);
+
+        // 模拟实时订单数据
+        var orders = [
+            { no: 'ORD-2024-001', product: '智能手机X1', amount: '¥3,999', status: '已完成' },
+            { no: 'ORD-2024-002', product: '空气净化器', amount: '¥1,299', status: '配送中' },
+            { no: 'ORD-2024-003', product: '运动鞋Pro', amount: '¥699', status: '已付款' },
+            { no: 'ORD-2024-004', product: '进口零食包', amount: '¥259', status: '已完成' },
+            { no: 'ORD-2024-005', product: '护肤套装', amount: '¥899', status: '待发货' },
+            { no: 'ORD-2024-006', product: '智能音箱', amount: '¥499', status: '已完成' },
+            { no: 'ORD-2024-007', product: '机械键盘', amount: '¥599', status: '配送中' }
+        ];
+
+        function renderOrders() {
+            var tbody = document.getElementById('orderTable');
+            tbody.innerHTML = orders.map(function(o) {
+                /* 【改进点2-v2】订单状态颜色改为暖色系 */
+                var color = o.status === '已完成' ? '#2ed573' : o.status === '配送中' ? '#ffa502' : '#ff6b6b';
+                return '<tr><td>' + o.no + '</td><td>' + o.product + '</td><td>' + o.amount +
+                       '</td><td style="color:' + color + '">' + o.status + '</td></tr>';
+            }).join('');
+        }
+        renderOrders();
+
+        /* ============================
+         * 【改进点3-v2】新增库存状态仪表盘
+         * 包含充足(绿)/警示(橙)/短缺(红)三色区间
+         * ============================ */
+        var inventoryGauge = echarts.init(document.getElementById('inventoryGauge'));
+        var inventoryOption = {
+            series: [{
+                type: 'gauge',
+                radius: '90%',
+                axisLine: {
+                    lineStyle: {
+                        width: 12,
+                        color: [
+                            [0.3, '#e55039'],   /* 0-30%：短缺（红色） */
+                            [0.6, '#ffa502'],   /* 30-60%：警示（橙色） */
+                            [1, '#2ed573']      /* 60-100%：充足（绿色） */
+                        ]
+                    }
+                },
+                splitLine: { distance: -14, length: 5, lineStyle: { color: '#ffecd2', width: 1 } },
+                axisTick: { distance: -14, length: 3, lineStyle: { color: '#ffecd2', width: 1 } },
+                axisLabel: { color: '#ffecd2', distance: 14, fontSize: 9 },
+                pointer: { itemStyle: { color: '#ff9f43' } },
+                detail: {
+                    valueAnimation: true,
+                    formatter: function(value) {
+                        var level = value >= 60 ? '充足' : value >= 30 ? '警示' : '短缺';
+                        return value + '%\n' + level;
+                    },
+                    color: '#ff9f43',
+                    fontSize: 14
+                },
+                /* 库存率为72%，表示库存状态良好（充足区间） */
+                data: [{ value: 72, name: '库存率' }]
+            }]
+        };
+        inventoryGauge.setOption(inventoryOption);
+
+        // 窗口自适应
+        window.addEventListener('resize', function() {
+            categoryChart.resize();
+            regionChart.resize();
+            trendChart.resize();
+            channelChart.resize();
+            inventoryGauge.resize();
+        });
+    </script>
+</body>
+</html>
