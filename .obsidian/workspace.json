@@ -1,0 +1,222 @@
+{
+  "main": {
+    "id": "8d69877e3c81f677",
+    "type": "split",
+    "children": [
+      {
+        "id": "8ba62bd29bac6d4d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "47f3b2bb75c0c6ba",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "数学笔记/rudin的实分析与复分析/ch5.md",
+                "mode": "source",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "ch5"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "9138eaa28a314b36",
+    "type": "split",
+    "children": [
+      {
+        "id": "fbc39272ba2bcaf6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1cb9591285e0ff86",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "b64bf297ffdf48ef",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "4e807f7f783626df",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "9c2bdf35d34801e1",
+    "type": "split",
+    "children": [
+      {
+        "id": "1c14d8178c2d8a8e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f4ab0e2d7f6cd6e4",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "数学笔记/信息论/chapter 2.2.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "chapter 2.2 的反向链接列表"
+            }
+          },
+          {
+            "id": "ed215d085b966d2d",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "抽象代数/5.6pid上的矩阵.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "5.6pid上的矩阵 的出链列表"
+            }
+          },
+          {
+            "id": "c8db4540db506bf3",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "b0bc317d4d31e377",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "抽象代数/5.6pid上的矩阵.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "5.6pid上的矩阵 的大纲"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "ai-companion:AI assistant": false,
+      "copilot:Open Copilot Chat": false
+    }
+  },
+  "active": "47f3b2bb75c0c6ba",
+  "lastOpenFiles": [
+    "数学笔记/rudin的实分析与复分析/ppt6145.tmp",
+    "数学笔记/rudin的实分析与复分析/ppt9488.tmp",
+    "数学笔记/rudin的实分析与复分析/pptA53A.tmp",
+    "数学笔记/rudin的实分析与复分析/~$Ch5.pptx",
+    "数学笔记/rudin的实分析与复分析/Ch5~042EB.tmp",
+    "数学笔记/rudin的实分析与复分析/Ch5~19097.tmp",
+    "数学笔记/rudin的实分析与复分析/Ch5~FF536.tmp",
+    "数学笔记/rudin的实分析与复分析/Ch5.pptx",
+    "杂七杂八/测试.md",
+    "数学笔记/rudin的实分析与复分析/ch5.md",
+    "数学笔记/rudin的实分析与复分析/ch02-riesz-representation.md",
+    "数学笔记/manifold/未命名 1.md",
+    "数学笔记/manifold/未命名.md",
+    "数学笔记/manifold/De_Rham_Theory.md",
+    "数学笔记/信息论/Chapter_03_Lossless_Data_Compression.md",
+    "数学笔记/manifold",
+    "数学笔记/信息论/_Index.md.tmp.39600.7ff335d40bdc",
+    "数学笔记/信息论/_Index.md.tmp.39600.8f34107d371f",
+    "数学笔记/信息论/Chapter_04_Data_Transmission_and_Channel_Capacity.md",
+    "数学笔记/信息论/Chapter_02_Information_Measures_for_Discrete_Systems.md",
+    "数学笔记/信息论/条件化不会减小KL散度.md",
+    "数学笔记/信息论/chapter2.4 2.5.md",
+    "数学笔记/信息论/chapter 2.3 Properties of Entropy and Mutual Information for Multiple Random Variables.md",
+    "SfM_Obsidian_Vault/03-两视图几何/五点七点八点法.md",
+    "SfM_Obsidian_Vault/03-两视图几何/极几何总览.md",
+    "SfM_Obsidian_Vault/03-两视图几何/基础矩阵F.md",
+    "SfM_Obsidian_Vault/03-两视图几何/本质矩阵分解与正深度.md",
+    "SfM_Obsidian_Vault/06-优化与BA/非线性最小二乘.md",
+    "SfM_Obsidian_Vault/05-SfM系统/退化情形与失败诊断.md",
+    "SfM_Obsidian_Vault/05-SfM系统/增量式SfM.md",
+    "SfM_Obsidian_Vault/05-SfM系统/全局式与混合式SfM.md",
+    "SfM_Obsidian_Vault/05-SfM系统/初始化-图像注册与三角化.md",
+    "SfM_Obsidian_Vault/04-重建核心/PnP与绝对位姿.md",
+    "SfM_Obsidian_Vault/04-重建核心/三角测量.md",
+    "SfM_Obsidian_Vault/04-重建核心/几何误差与重投影误差.md",
+    "SfM_Obsidian_Vault/04-重建核心/尺度歧义与规范自由度.md",
+    "数学笔记/抽象代数/域/082174d0-63f9-42fb-8a45-8bf279d34197.png",
+    "数学笔记/信息论/Pasted image 20260728135213.png",
+    "数学笔记/信息论/Pasted image 20260727173751.png",
+    "2000-2017年各产业季度生产总值走势图.png",
+    "数学笔记/图机器学习/image-2.png",
+    "数学笔记/图机器学习/image.png",
+    "Pasted image 20260226165633.png",
+    "抽象代数/Pasted image 20260226164456.png",
+    "抽象代数/Pasted image 20260226164420.png",
+    "抽象代数/Pasted image 20260226164346.png"
+  ]
+}

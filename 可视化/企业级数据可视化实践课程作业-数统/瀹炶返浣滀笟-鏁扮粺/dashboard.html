@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>数据可视化大屏</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Microsoft YaHei", sans-serif;
+      background: #081b29;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    .container {
+      width: 100vw;
+      height: 100vh;
+      display: grid;
+      grid-template-rows: 70px 1fr;
+      background: linear-gradient(180deg, #06121c 0%, #0b2a3a 100%);
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: bold;
+      color: #4fd2ff;
+      letter-spacing: 2px;
+      border-bottom: 1px solid rgba(79, 210, 255, 0.3);
+      text-shadow: 0 0 10px rgba(79, 210, 255, 0.6);
+    }
+
+    .main {
+      display: grid;
+      grid-template-columns: 25% 50% 25%;
+      gap: 12px;
+      padding: 12px;
+      height: calc(100vh - 70px);
+    }
+
+    .panel {
+      background: rgba(10, 30, 50, 0.75);
+      border: 1px solid rgba(79, 210, 255, 0.25);
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 180, 255, 0.12);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel-title {
+      font-size: 18px;
+      color: #7fdfff;
+      margin-bottom: 10px;
+      border-left: 4px solid #00c2ff;
+      padding-left: 8px;
+    }
+
+    .chart {
+      flex: 1;
+      min-height: 220px;
+    }
+
+    .center {
+      display: grid;
+      grid-template-rows: 120px 1fr 1fr;
+      gap: 12px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .stat-card {
+      background: rgba(0, 120, 180, 0.18);
+      border: 1px solid rgba(79, 210, 255, 0.3);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: bold;
+      color: #3fe0ff;
+    }
+
+    .stat-label {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #bfefff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">企业经营数据可视化大屏</div>
+
+    <div class="main">
+      <!-- 左侧 -->
+      <div style="display:grid; grid-template-rows:1fr 1fr; gap:12px;">
+        <div class="panel">
+          <div class="panel-title">销售趋势</div>
+          <div id="lineChart" class="chart"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">品类占比</div>
+          <div id="pieChart" class="chart"></div>
+        </div>
+      </div>
+
+      <!-- 中间 -->
+      <div class="center">
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-value">12,846</div>
+            <div class="stat-label">今日订单</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">¥386万</div>
+            <div class="stat-label">本月销售额</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">2,431</div>
+            <div class="stat-label">活跃用户</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">98.2%</div>
+            <div class="stat-label">履约率</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">区域销量分布</div>
+          <div id="barChart" class="chart"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">访问来源分析</div>
+          <div id="radarChart" class="chart"></div>
+        </div>
+      </div>
+
+      <!-- 右侧 -->
+      <div style="display:grid; grid-template-rows:1fr 1fr; gap:12px;">
+        <div class="panel">
+          <div class="panel-title">近7日用户增长</div>
+          <div id="areaChart" class="chart"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">任务完成率</div>
+          <div id="gaugeChart" class="chart"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const textColor = '#d8f6ff';
+    const axisLineColor = 'rgba(255,255,255,0.15)';
+
+    const lineChart = echarts.init(document.getElementById('lineChart'));
+    lineChart.setOption({
+      tooltip: { trigger: 'axis' },
+      grid: { left: '8%', right: '5%', top: '15%', bottom: '12%' },
+      xAxis: {
+        type: 'category',
+        data: ['周一','周二','周三','周四','周五','周六','周日'],
+        axisLine: { lineStyle: { color: axisLineColor } },
+        axisLabel: { color: textColor }
+      },
+      yAxis: {
+        type: 'value',
+        axisLine: { lineStyle: { color: axisLineColor } },
+        splitLine: { lineStyle: { color: 'rgba(255,255,255,0.08)' } },
+        axisLabel: { color: textColor }
+      },
+      series: [{
+        data: [120, 200, 150, 260, 300, 180, 220],
+        type: 'line',
+        smooth: true,
+        symbol: 'circle',
+        symbolSize: 8,
+        lineStyle: { color: '#00f0ff', width: 3 },
+        itemStyle: { color: '#00f0ff' },
+        areaStyle: {
+          color: new echarts.graphic.LinearGradient(0,0,0,1,[
+            { offset: 0, color: 'rgba(0,240,255,0.5)' },
+            { offset: 1, color: 'rgba(0,240,255,0.05)' }
+          ])
+        }
+      }]
+    });
+
+    const pieChart = echarts.init(document.getElementById('pieChart'));
+    pieChart.setOption({
+      tooltip: { trigger: 'item' },
+      legend: {
+        bottom: 0,
+        textStyle: { color: textColor }
+      },
+      series: [{
+        type: 'pie',
+        radius: ['40%', '70%'],
+        data: [
+          { value: 35, name: '电子产品' },
+          { value: 25, name: '服饰' },
+          { value: 20, name: '家居' },
+          { value: 20, name: '食品' }
+        ],
+        label: { color: textColor }
+      }]
+    });
+
+    const barChart = echarts.init(document.getElementById('barChart'));
+    barChart.setOption({
+      tooltip: { trigger: 'axis' },
+      grid: { left: '8%', right: '5%', top: '15%', bottom: '12%' },
+      xAxis: {
+        type: 'category',
+        data: ['华北','华东','华南','华中','西南','西北'],
+        axisLine: { lineStyle: { color: axisLineColor } },
+        axisLabel: { color: textColor }
+      },
+      yAxis: {
+        type: 'value',
+        axisLine: { lineStyle: { color: axisLineColor } },
+        splitLine: { lineStyle: { color: 'rgba(255,255,255,0.08)' } },
+        axisLabel: { color: textColor }
+      },
+      series: [{
+        type: 'bar',
+        data: [320, 402, 301, 334, 290, 180],
+        barWidth: '45%',
+        itemStyle: {
+          borderRadius: [6, 6, 0, 0],
+          color: new echarts.graphic.LinearGradient(0,0,0,1,[
+            { offset: 0, color: '#00c6ff' },
+            { offset: 1, color: '#0072ff' }
+          ])
+        }
+      }]
+    });
+
+    const radarChart = echarts.init(document.getElementById('radarChart'));
+    radarChart.setOption({
+      tooltip: {},
+      radar: {
+        indicator: [
+          { name: '直接访问', max: 100 },
+          { name: '搜索引擎', max: 100 },
+          { name: '社交媒体', max: 100 },
+          { name: '邮件营销', max: 100 },
+          { name: '广告投放', max: 100 }
+        ],
+        axisName: { color: textColor },
+        splitLine: { lineStyle: { color: 'rgba(255,255,255,0.1)' } },
+        splitArea: { areaStyle: { color: ['rgba(255,255,255,0.02)'] } },
+        axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } }
+      },
+      series: [{
+        type: 'radar',
+        data: [{
+          value: [80, 90, 70, 60, 75],
+          areaStyle: { color: 'rgba(0, 200, 255, 0.25)' },
+          lineStyle: { color: '#00d0ff' },
+          itemStyle: { color: '#00d0ff' }
+        }]
+      }]
+    });
+
+    const areaChart = echarts.init(document.getElementById('areaChart'));
+    areaChart.setOption({
+      tooltip: { trigger: 'axis' },
+      grid: { left: '8%', right: '5%', top: '15%', bottom: '12%' },
+      xAxis: {
+        type: 'category',
+        data: ['1天前','2天前','3天前','4天前','5天前','6天前','7天前'],
+        axisLine: { lineStyle: { color: axisLineColor } },
+        axisLabel: { color: textColor }
+      },
+      yAxis: {
+        type: 'value',
+        axisLine: { lineStyle: { color: axisLineColor } },
+        splitLine: { lineStyle: { color: 'rgba(255,255,255,0.08)' } },
+        axisLabel: { color: textColor }
+      },
+      series: [{
+        type: 'line',
+        smooth: true,
+        data: [820, 932, 901, 934, 1290, 1330, 1320],
+        lineStyle: { color: '#7CFFB2', width: 3 },
+        itemStyle: { color: '#7CFFB2' },
+        areaStyle: {
+          color: new echarts.graphic.LinearGradient(0,0,0,1,[
+            { offset: 0, color: 'rgba(124,255,178,0.5)' },
+            { offset: 1, color: 'rgba(124,255,178,0.05)' }
+          ])
+        }
+      }]
+    });
+
+    const gaugeChart = echarts.init(document.getElementById('gaugeChart'));
+    gaugeChart.setOption({
+      series: [{
+        type: 'gauge',
+        progress: { show: true, width: 14 },
+        axisLine: { lineStyle: { width: 14 } },
+        splitLine: { distance: -18, length: 8, lineStyle: { color: '#fff', width: 1 } },
+        axisTick: { distance: -18, length: 4, lineStyle: { color: '#fff', width: 1 } },
+        axisLabel: { color: textColor, distance: 20 },
+        detail: {
+          valueAnimation: true,
+          formatter: '{value}%',
+          color: '#3fe0ff',
+          fontSize: 24
+        },
+        data: [{ value: 86 }]
+      }]
+    });
+
+    window.addEventListener('resize', () => {
+      lineChart.resize();
+      pieChart.resize();
+      barChart.resize();
+      radarChart.resize();
+      areaChart.resize();
+      gaugeChart.resize();
+    });
+  </script>
+</body>
+</html>
